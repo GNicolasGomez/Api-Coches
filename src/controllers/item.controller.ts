@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
-import { insertCar, getCars, getCar } from "../services/item.services";
+import { Car } from "../interfaces/car.interface";
+import { insertCar, getCars, getCar, updateCar, deleteCar } from "../services/item.services";
 import { handleHttp } from "../utils/error.handle";
 
 const getItem = async ({params}:Request, res:Response) => {
@@ -25,9 +26,11 @@ const getItems = async (req:Request, res:Response) => {
 }
 
 
-const updateItem = (req:Request, res:Response) => {
+const updateItem = async ({params, body} :Request, res:Response) => {
     try {
-        
+        const {id} = params;
+        const response = await updateCar(id, body);
+        res.send(response);
     } catch (error) {
         handleHttp(res, 'ERROR_UPDATE_ITEMS');
     }
@@ -47,9 +50,12 @@ const postItem = async ({body} :Request, res:Response) => {
 }
 
 
-const deleteItem = (req:Request, res:Response) => {
+const deleteItem = async ({params}:Request, res:Response) => {
     try {
-        
+        const {id} = params;
+        const response = await deleteCar(id);
+        const data = response ? response : 'NOT_FOUND';
+        res.send(data);
     } catch (error) {
         handleHttp(res, 'ERROR_DELETE_ITEM');
     }

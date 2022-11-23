@@ -1,17 +1,18 @@
 import express from 'express';
 import { Request, Response } from 'express';
 import { getItems, getItem , postItem, updateItem, deleteItem } from '../controllers/item.controller';
+import { logMiddleware } from '../middleware/log';
 const router = express.Router();
 
 /**
  * http://localhost:3001/items [GET]
 */
-router.get('/', getItems);
+router.get('/', logMiddleware, getItems);
 
 /**
  * http://localhost:3001/items/:id [GET]
 */
-router.get('/:id', getItem);
+router.get('/:id', logMiddleware, getItem);
 
 
 /**
